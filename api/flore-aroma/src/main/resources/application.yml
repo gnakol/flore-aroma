@@ -1,1 +1,52 @@
-spring.application.name=flore-aroma
+server:
+  port: 9000
+  address: 0.0.0.0
+  servlet:
+    context-path: /flore-api
+
+spring:
+  application:
+    name: florearoma-auth
+  datasource:
+    url: jdbc:postgresql://localhost:5433/florearoma_db   # Postgres exposé par docker-compose (5433 -> 5432)
+    username: florearoma_user
+    password: florearoma_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+  mail:
+    host: localhost        # Mailhog
+    port: 1026             # 1026 (mappé vers 1025 dans le conteneur)
+    username: ""
+    password: ""
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/florearoma   # à créer dans Keycloak
+
+keycloak:
+  server-url: http://localhost:8082
+  realm: florearoma                 # ton realm applicatif
+  client-id: admin-cli              # ok en dev ; en prod crée un client "confidential"
+  client-secret: ""
+  admin-username: admin
+  admin-password: admin
+  front-client-id: florearoma-front # nomme ton client public pour le front (à créer dans Keycloak)
+
+logging:
+  level:
+    org.springframework.security: INFO
