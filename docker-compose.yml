@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  keycloak_db:
+    image: postgres:13
+    container_name: florearoma_keycloak_db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    volumes:
+      - florearoma_keycloak_db_data:/var/lib/postgresql/data
+    networks:
+      - keycloak_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: florearoma_keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak_db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: start-dev
+    ports:
+      - "8082:8080"
+    depends_on:
+      - keycloak_db
+    networks:
+      - keycloak_network
+
+  florearoma_db:
+    image: postgres:13
+    container_name: florearoma_app_db
+    environment:
+      POSTGRES_DB: florearoma_db
+      POSTGRES_USER: florearoma_user
+      POSTGRES_PASSWORD: florearoma_pass
+    volumes:
+      - florearoma_app_db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # On expose sur 5433 pour éviter conflit avec d'autres projets
+    networks:
+      - keycloak_network
+
+  smtp_server:
+    image: mailhog/mailhog:latest
+    container_name: florearoma_smtp
+    ports:
+      - "1026:1025"  # SMTP
+      - "8026:8025"  # Web UI (http://localhost:8026)
+    networks:
+      - keycloak_network
+
+volumes:
+  florearoma_keycloak_db_data:
+  florearoma_app_db_data:
+
+networks:
+  keycloak_network:
+    external: true
