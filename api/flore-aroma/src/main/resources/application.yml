@@ -8,7 +8,7 @@ spring:
   application:
     name: florearoma-auth
   datasource:
-    url: jdbc:postgresql://localhost:5433/florearoma_db   # Postgres exposé par docker-compose (5433 -> 5432)
+    url: jdbc:postgresql://localhost:5433/florearoma_db   # Postgres exposï¿½ par docker-compose (5433 -> 5432)
     username: florearoma_user
     password: florearoma_pass
     driver-class-name: org.postgresql.Driver
@@ -23,7 +23,7 @@ spring:
       max-request-size: 200MB
   mail:
     host: localhost        # Mailhog
-    port: 1026             # 1026 (mappé vers 1025 dans le conteneur)
+    port: 1026             # 1026 (mappï¿½ vers 1025 dans le conteneur)
     username: ""
     password: ""
     properties:
@@ -36,17 +36,25 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8082/realms/florearoma   # à créer dans Keycloak
+          issuer-uri: http://localhost:8082/realms/florearoma   # ï¿½ crï¿½er dans Keycloak
 
 keycloak:
   server-url: http://localhost:8082
   realm: florearoma                 # ton realm applicatif
-  client-id: admin-cli              # ok en dev ; en prod crée un client "confidential"
+  client-id: admin-cli              # ok en dev ; en prod crï¿½e un client "confidential"
   client-secret: ""
   admin-username: admin
   admin-password: admin
-  front-client-id: florearoma-front # nomme ton client public pour le front (à créer dans Keycloak)
+  front-client-id: florearoma-app # nomme ton client public pour le front (ï¿½ crï¿½er dans Keycloak)
 
 logging:
   level:
     org.springframework.security: INFO
+
+whatsapp:
+  phone-number-id: "792701943934379"
+  token: "EAALcD1UDR6YBP3GuyYLJxz6VXLdynV9ZCtsXaDdwN8BfdZBEU7QfeVHHNzO0wrY9NZBemq1dZCje1SqyiV9b73VNWeF8h4SvfFQXIBIu7Ow4apJAbjuczHZBTHvXsevy2NqykNVZCPRswCOXMDUXp1I1iT9hvQwHBoMdbZCw57KiZBVzD2kaD8qxC3Q7eVmMq487GanTLMMAp0xZBQ4UZC1Mt56IfM1cN2RGQr7RW4tp9GCHTbuPkZD"
+app:
+  public-base-url: "https://clay-adds-incidence-jump.trycloudflare.com"
+
+
